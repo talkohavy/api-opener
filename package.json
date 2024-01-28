@@ -1,6 +1,6 @@
 {
   "name": "api-opener",
-  "version": "0.0.0",
+  "version": "0.0.3",
   "description": "to be changed",
   "private": "true",
   "main": "lib/index.js",
@@ -13,16 +13,13 @@
     "lint-fix": "eslint --fix -c ./.eslintrc.json --ignore-path ./.eslintignore 'src/**/*.{js,jsx,tsx,ts,d.ts,cjs,mjs}'",
     "format": "biome format --verbose ./src",
     "format-fix": "biome format --verbose ./src --write",
-    "format-prettier": "prettier . --check --config ./.prettierrc.js --ignore-path .prettierignore",
-    "format-prettier-fix": "prettier . --write --config ./.prettierrc.js --ignore-path .prettierignore",
+    "format-prettier": "prettier . --check --config ./.prettierrc.mjs --ignore-path .prettierignore",
+    "format-prettier-fix": "prettier . --write --config ./.prettierrc.mjs --ignore-path .prettierignore",
+    "build": "tsup --config tsup.config.js",
     "test": "node --test",
     "preversion": "npm test",
-    "version": "npm run format-fix && npm run build",
+    "version": "npm run format-prettier-fix && npm run build",
     "postversion": "git push && git push --tags && cd dist && npm publish",
-    "build:pre": "rm -rf dist",
-    "build:intermediate": "tsc -p jsconfig.json",
-    "build:post": "node ./toolbox/postBuild",
-    "build": "pnpm run build:pre && pnpm run build:intermediate && pnpm run build:post",
     "prepare": "husky install"
   },
   "sideEffects": false,
@@ -60,6 +57,6 @@
     "eslint-plugin-ezlint": "^1.0.35",
     "husky": "^8.0.3",
     "prettier": "^3.1.0",
-    "typescript": "^5.3.3"
+    "tsup": "^8.0.1"
   }
 }

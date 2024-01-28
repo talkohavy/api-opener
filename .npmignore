@@ -1,7 +1,10 @@
 .eslintignore
 .eslintrc.json
 .husky/
-.npmrc.example
 .vscode/
+toolbox/
+.npmrc.example
 biome.json
 jsconfig.json
+
+tsup.config.js
