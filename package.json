@@ -51,12 +51,12 @@
     "email": "talkohavy@gmail.com"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.5.2",
-    "@types/node": "^20.11.0",
-    "eslint": "^8.54.0",
-    "eslint-plugin-ezlint": "^1.0.35",
-    "husky": "^8.0.3",
-    "prettier": "^3.1.0",
+    "@biomejs/biome": "1.5.3",
+    "@types/node": "^20.11.10",
+    "eslint": "^8.56.0",
+    "eslint-plugin-ezlint": "^1.1.6",
+    "husky": "^9.0.6",
+    "prettier": "^3.2.4",
     "tsup": "^8.0.1"
   }
 }
