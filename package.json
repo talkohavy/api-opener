@@ -1,6 +1,6 @@
 {
   "name": "api-opener",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "to be changed",
   "private": "true",
   "main": "lib/index.js",
