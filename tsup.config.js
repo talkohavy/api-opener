@@ -21,7 +21,7 @@ const tsupConfig = defineConfig((_options) => ({
   async onSuccess() {
     copyReadmeFile();
 
-    copyIndexTsFile();
+    copyIndexDtsFile();
 
     copyNpmrcFile();
 
@@ -41,7 +41,7 @@ function copyReadmeFile() {
   readStream.pipe(writeStream);
 }
 
-function copyIndexTsFile() {
+function copyIndexDtsFile() {
   const readStream = fs.createReadStream('./types/index.d.ts');
   const writeStream = fs.createWriteStream(`./${outDir}/index.d.ts`);
   readStream.pipe(writeStream);
