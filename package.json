@@ -8,11 +8,11 @@
     ".": {
       "import": {
         "import": "./lib/index.js",
-        "types": "./lib/index.d.ts"
+        "types": "./index.d.ts"
       },
       "require": {
         "default": "./lib/index.cjs",
-        "types": "./lib/index.d.ts"
+        "types": "./index.d.ts"
       }
     }
   },
