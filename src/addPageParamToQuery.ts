@@ -1,9 +1,6 @@
-/**
- * @typedef {import('../types').SwaggerParameter} SwaggerParameter
- */
+import type { SwaggerParameter } from './types';
 
-/** @returns {SwaggerParameter} */
-function addPageParamToQuery() {
+function addPageParamToQuery(): SwaggerParameter {
   return {
     name: 'page',
     in: 'query',

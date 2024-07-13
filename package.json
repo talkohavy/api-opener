@@ -1,26 +1,38 @@
 {
   "name": "api-opener",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "Design your API easily with Swagger Open-Api specification.",
   "private": "true",
-  "main": "index.js",
-  "module": "index.js",
-  "types": "index.d.ts",
   "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "import": "./lib/index.js",
+        "types": "./lib/index.d.ts"
+      },
+      "require": {
+        "default": "./lib/index.cjs",
+        "types": "./lib/index.d.ts"
+      }
+    }
+  },
   "scripts": {
     "clean": "rm -rf node_modules",
-    "lint": "eslint -c ./.eslintrc.json --ignore-path ./.eslintignore 'src/**/*.{js,jsx,tsx,ts,d.ts,cjs,mjs}'",
-    "lint-fix": "eslint --fix -c ./.eslintrc.json --ignore-path ./.eslintignore 'src/**/*.{js,jsx,tsx,ts,d.ts,cjs,mjs}'",
+    "lint": "eslint -c ./.eslintrc.json .",
+    "lint-fix": "eslint --fix -c ./.eslintrc.json .",
     "format": "biome format --verbose ./src",
     "format-fix": "biome format --verbose ./src --write",
     "format-prettier": "prettier . --check --config ./.prettierrc.mjs --ignore-path .prettierignore",
     "format-prettier-fix": "prettier . --write --config ./.prettierrc.mjs --ignore-path .prettierignore",
-    "build": "tsup --config tsup.config.js",
+    "build": "node ./build.config.js",
     "test": "node --test",
-    "preversion": "npm test",
-    "version": "npm run format-prettier-fix && npm run build",
-    "postversion": "git push && git push --tags && cd dist && npm publish",
-    "prepare": "husky install"
+    "cs-add": "pnpm changeset add",
+    "cs-status": "pnpm changeset status --verbose",
+    "cs-bump": "npm test && pnpm changeset version",
+    "cs-publish": "npm run build && cd dist && pnpm changeset publish",
+    "old-way-preversion": "npm test",
+    "old-way-version": "npm run format-prettier-fix && npm run build",
+    "old-way-postversion": "git push && git push --tags && cd dist && npm publish"
   },
   "sideEffects": false,
   "contributors": [
@@ -40,23 +52,21 @@
     "registry": "https://registry.npmjs.org/",
     "access": "restricted"
   },
-  "exports": {
-    ".": {
-      "import": "./index.js",
-      "require": "./index.cjs"
-    }
-  },
   "bugs": {
     "url": "https://github.com/talkohavy/api-opener/issues",
     "email": "talkohavy@gmail.com"
   },
   "devDependencies": {
     "@biomejs/biome": "1.6.1",
+    "@changesets/cli": "^2.27.7",
     "@types/node": "^20.11.27",
     "eslint": "^8.57.0",
-    "eslint-plugin-ezlint": "^1.2.1",
+    "eslint-plugin-ezlint": "^1.6.2",
     "husky": "^9.0.11",
     "prettier": "^3.2.5",
-    "tsup": "^8.0.2"
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@talkohavy/lodash": "^1.2.1"
   }
 }

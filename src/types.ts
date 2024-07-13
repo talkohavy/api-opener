@@ -44,62 +44,18 @@ type SwaggerArrayFormat = {
   format?: undefined;
 };
 
-type SwaggerRouteMethod = {
-  tags: Array<SwaggerTag>;
-  summary?: string;
-  description?: string;
-  operationId?: string;
-  parameters?: Array<SwaggerParameter>;
-  requestBody?: SwaggerRequestBody;
-  responses?: SwaggerResponse;
-  security?: any;
-};
-
-export type AddIdParamToPathProps = {
-  objectName: string;
-  operationName: string;
-  isPositiveNumber?: boolean;
-};
-
-export type AddRequestBodyProps = {
-  description?: string;
-  isRequired?: boolean;
-  requiredFields?: Array<string>;
-  /**
-   * When using `properties`, you shouldn't pass `refString`.
-   */
-  properties?: Record<string, SwaggerProperty>;
-  /**
-   * When using `refString`, you shouldn't pass `properties`.
-   */
-  refString?: string;
+type SwaggerResponseContent = {
+  description: string;
+  content?: {
+    'application/x-www-form-urlencoded': any;
+    'application/json': any;
+  };
 };
 
 export type AddResponseStatusProps = {
   statusCode: number | string;
   description: string;
   schema?: any;
-};
-
-export type CreateApiRouteProps = {
-  /**
-   * Rules:
-   * - Must start with a slash '/'.
-   * - If it's a dynamic route, use '/some-route/{id}'. (id is the assumed name of the parameter)
-   * - You should not add 'http://localhost:port' or some other domain as a prefix. Swagger will add the baseUrl you provided as a prefix.
-   */
-  route: string;
-  method: RestMethodNames;
-  tag?: SwaggerTag;
-} & Omit<SwaggerRouteMethod, 'tags'>;
-
-export type CreateSwaggerApiDocsProps = {
-  title?: string;
-  baseUrl: string;
-  routes: Array<SwaggerRoute>;
-  extendedTags?: Array<SwaggerTag>;
-  definitions?: any;
-  responses?: any;
 };
 
 export type RestMethodNames = 'get' | 'post' | 'put' | 'patch' | 'delete';
@@ -127,16 +83,16 @@ export type SwaggerRequestBody = {
   };
 };
 
-export type SwaggerResponse = Record<
-  number | 'default',
-  {
-    description: string;
-    content?: {
-      'application/x-www-form-urlencoded': any;
-      'application/json': any;
-    };
-  }
->;
+export type SwaggerResponse = {
+  [ResponseStatusCodes.OK]?: SwaggerResponseContent;
+  [ResponseStatusCodes.CREATED]?: SwaggerResponseContent;
+  [ResponseStatusCodes.BAD_REQUEST]?: SwaggerResponseContent;
+  [ResponseStatusCodes.NOT_FOUND]?: SwaggerResponseContent;
+  [ResponseStatusCodes.UNAUTHORIZED]?: SwaggerResponseContent;
+  [ResponseStatusCodes.FORBIDDEN]?: SwaggerResponseContent;
+  [ResponseStatusCodes.INTERNAL_SERVER_ERROR]?: SwaggerResponseContent;
+  [ResponseStatusCodes.DEFAULT]?: SwaggerResponseContent;
+};
 
 export type SwaggerRoute = Record<
   string,
@@ -148,6 +104,17 @@ export type SwaggerRoute = Record<
     delete?: SwaggerRouteMethod;
   }
 >;
+
+export type SwaggerRouteMethod = {
+  tags: Array<SwaggerTag>;
+  summary?: string;
+  description?: string;
+  operationId?: string;
+  parameters?: Array<SwaggerParameter>;
+  requestBody?: SwaggerRequestBody;
+  responses?: SwaggerResponse;
+  security?: any;
+};
 
 export type SwaggerSchema =
   | { $ref: string }
@@ -171,9 +138,20 @@ export type SwaggerTag =
       };
     };
 
-export function addIdParamToPath(props: AddIdParamToPathProps): SwaggerParameter;
-export function addPageParamToQuery(): SwaggerParameter;
-export function addRequestBody(props: AddRequestBodyProps): SwaggerRequestBody;
-export function addResponseStatus(props: AddResponseStatusProps): SwaggerResponse;
-export function createApiRoute(props: CreateApiRouteProps): SwaggerRoute;
-export function createSwaggerApiDocs(props: CreateSwaggerApiDocsProps): any;
+export enum ResponseStatusCodes {
+  OK = 200,
+  CREATED = 201,
+  BAD_REQUEST = 400,
+  NOT_FOUND = 404,
+  UNAUTHORIZED = 401,
+  FORBIDDEN = 403,
+  INTERNAL_SERVER_ERROR = 500,
+  DEFAULT = 'default',
+}
+
+// export function addIdParamToPath(props: AddIdParamToPathProps): SwaggerParameter;
+// export function addPageParamToQuery(): SwaggerParameter;
+// export function addRequestBody(props: AddRequestBodyProps): SwaggerRequestBody;
+// export function addResponseStatus(props: AddResponseStatusProps): SwaggerResponse;
+// export function createApiRoute(props: CreateApiRouteProps): SwaggerRoute;
+// export function createSwaggerApiDocs(props: CreateSwaggerApiDocsProps): any;

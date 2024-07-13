@@ -5,6 +5,5 @@
 toolbox/
 .npmrc.example
 biome.json
-jsconfig.json
-
-tsup.config.js
+tsconfig.json
+.changeset

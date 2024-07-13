@@ -1,29 +1,40 @@
 import { addResponseStatus } from './addResponseStatus.js';
+import {
+  ResponseStatusCodes,
+  type RestMethodNames,
+  type SwaggerRoute,
+  type SwaggerRouteMethod,
+  type SwaggerTag,
+} from './types.js';
 
-/**
- * @typedef {import('../types').SwaggerRoute} SwaggerRoute
- * @typedef {import('../types').CreateApiRouteProps} CreateApiRouteProps
- * @typedef {import('../types').RestMethodNames} RestMethodNames
- */
+type CreateApiRouteProps = {
+  /**
+   * Rules:
+   * - Must start with a slash '/'.
+   * - If it's a dynamic route, use '/some-route/{id}'. (id is the assumed name of the parameter)
+   * - You should not add 'http://localhost:port' or some other domain as a prefix. Swagger will add the baseUrl you provided as a prefix.
+   */
+  route: string;
+  method: RestMethodNames;
+  tag?: SwaggerTag;
+} & Omit<SwaggerRouteMethod, 'tags'>;
 
-/**
- * @param {CreateApiRouteProps} props
- * @returns {SwaggerRoute}
- */
-function createApiRoute({
-  route,
-  method,
-  tag,
-  summary,
-  description,
-  operationId,
-  parameters,
-  requestBody,
-  // eslint-disable-next-line
-  responses,
-  security,
-}) {
-  const routeProps = {};
+function createApiRoute(props: CreateApiRouteProps): SwaggerRoute {
+  const {
+    route,
+    method,
+    tag,
+    summary,
+    description,
+    operationId,
+    parameters,
+    requestBody,
+    // eslint-disable-next-line
+    responses,
+    security,
+  } = props;
+
+  const routeProps: SwaggerRouteMethod = {} as any;
 
   // Step 1: Attach group name
   routeProps.tags = [tag ?? 'Rest'];
@@ -46,32 +57,32 @@ function createApiRoute({
   // Step 7: attach responses
   routeProps.responses = {
     ...addResponseStatus({
-      statusCode: 200,
+      statusCode: ResponseStatusCodes.OK,
       description: 'A successful request.',
       // schema: responses?.[200]?.schema,
     }),
     ...addResponseStatus({
-      statusCode: 201,
+      statusCode: ResponseStatusCodes.CREATED,
       description: 'Resource was created successfully.',
       // schema: responses?.[201]?.schema,
     }),
     ...addResponseStatus({
-      statusCode: 400,
+      statusCode: ResponseStatusCodes.BAD_REQUEST,
       description: 'Validation error...',
       // schema: responses?.[400]?.schema,
     }),
     ...addResponseStatus({
-      statusCode: 404,
+      statusCode: ResponseStatusCodes.NOT_FOUND,
       description: 'Resource not found.',
       // schema: responses?.[404]?.schema,
     }),
     ...addResponseStatus({
-      statusCode: 500,
+      statusCode: ResponseStatusCodes.INTERNAL_SERVER_ERROR,
       description: 'Internal server error.',
       // schema: responses?.[500]?.schema,
     }),
     ...addResponseStatus({
-      statusCode: 'default',
+      statusCode: ResponseStatusCodes.DEFAULT,
       description: 'Unexpected error',
       schema: { type: 'object', properties: { error: { type: 'string', example: 'oops...' } } },
     }),
