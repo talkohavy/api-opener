@@ -4,6 +4,9 @@
     // Section 1: Projects
     // -------------------
     "incremental": true, // Save .tsbuildinfo files to allow for incremental compilation of projects.
+    "composite": true, // <--- When set to true, all implementation files must be matched by the "include" key pattern, or be listed in the "files" array. If this constraint is violated, tsc will error out and inform you which files weren't specified.
+    "tsBuildInfoFile": "./node_modules/.temp/tsconfig.app.tsbuildinfo",
+    // "rootDir": "", // <--- when composite is true, the rootDir setting, if not explicitly set, defaults to the directory containing the tsconfig.json file.
 
     // -----------------------------------
     // Section 2: Language and Environment
@@ -31,8 +34,8 @@
     // ---------------
     // Section 5: Emit
     // ---------------
-    "noEmit": true, // <--- defaults to true. Disable emitting files from a compilation.
-    "declaration": true, // Generate .d.ts files from TypeScript and JavaScript files in your project.
+    "noEmit": false, // <--- defaults to true. Disable emitting files from a compilation.
+    "declaration": true, // <--- Generate .d.ts files from TypeScript and JavaScript files in your project. When composite is set to true, this setting also defaults to true.
     // "declarationMap": true, // Create sourcemaps for d.ts files.
     // "emitDeclarationOnly": true, // Only output d.ts files and not JavaScript files.
     "sourceMap": false, // default value is false. Create source map files for emitted JavaScript files.
@@ -79,10 +82,9 @@
     // -----------------------
     // Section 8: Completeness
     // -----------------------
-    "skipLibCheck": true,
-
+    "skipLibCheck": true
   },
   "compileOnSave": true,
   "exclude": ["node_modules"],
-  "include": ["src/index.ts"]
+  "include": ["src/*"]
 }
