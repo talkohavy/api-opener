@@ -4,7 +4,7 @@
     // Section 1: Projects
     // -------------------
     "incremental": true, // Save .tsbuildinfo files to allow for incremental compilation of projects.
-    "composite": true, // <--- When set to true, all implementation files must be matched by the "include" key pattern, or be listed in the "files" array. If this constraint is violated, tsc will error out and inform you which files weren't specified.
+    "composite": false, // <--- When set to true, all implementation files must be matched by the "include" key pattern, or be listed in the "files" array. If this constraint is violated, tsc will error out and inform you which files weren't specified. This also means that matched files will be included in your build output! For example, "src/*" will include the entire "src" folder inside your "dist" folder.
     "tsBuildInfoFile": "./node_modules/.temp/tsconfig.app.tsbuildinfo",
     // "rootDir": "", // <--- when composite is true, the rootDir setting, if not explicitly set, defaults to the directory containing the tsconfig.json file.
 
@@ -86,5 +86,5 @@
   },
   "compileOnSave": true,
   "exclude": ["node_modules"],
-  "include": ["src/*"]
+  "include": ["src/index.ts"]
 }

@@ -3,15 +3,17 @@
   "version": "0.0.6",
   "description": "Design your API easily with Swagger Open-Api specification.",
   "private": "true",
-  "module": "index.js",
   "type": "module",
   "exports": {
     ".": {
       "import": {
-        "import": "./index.js",
-        "types": "./index.d.ts"
+        "import": "./lib/index.js",
+        "types": "./lib/index.d.ts"
       },
-      "require": "./index.cjs"
+      "require": {
+        "default": "./lib/index.cjs",
+        "types": "./lib/index.d.ts"
+      }
     }
   },
   "scripts": {
@@ -62,7 +64,6 @@
     "eslint-plugin-ezlint": "^1.6.2",
     "husky": "^9.0.11",
     "prettier": "^3.2.5",
-    "tsup": "^8.0.2",
     "typescript": "^5.4.5"
   },
   "dependencies": {
