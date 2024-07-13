@@ -1,5 +1,11 @@
 # api-opener
 
+## 0.1.1
+
+### Patch Changes
+
+- 135dc5f: path to declaration file was wrong
+
 ## 0.1.0
 
 ### Minor Changes
