@@ -58,5 +58,8 @@
     "husky": "^9.0.11",
     "prettier": "^3.2.5",
     "tsup": "^8.0.2"
+  },
+  "dependencies": {
+    "@talkohavy/lodash": "^1.2.1"
   }
 }

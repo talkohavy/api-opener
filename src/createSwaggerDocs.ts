@@ -1,19 +1,18 @@
-import { deepMerge } from './helpers/index.js';
+import { deepMerge } from '@talkohavy/lodash';
+import type { SwaggerRoute, SwaggerTag } from './types';
 
-/**
- * @typedef {import('../types').CreateSwaggerApiDocsProps} CreateSwaggerApiDocsProps
- * @typedef {import('../types').SwaggerTag} SwaggerTag
- */
+type CreateSwaggerApiDocsProps = {
+  title?: string;
+  baseUrl: string;
+  routes: Array<SwaggerRoute>;
+  extendedTags?: Array<SwaggerTag>;
+  definitions?: any;
+  responses?: any;
+};
 
-/** @param {CreateSwaggerApiDocsProps} props */
-function createSwaggerApiDocs({
-  title,
-  baseUrl,
-  routes,
-  extendedTags = [],
-  definitions = undefined,
-  responses = undefined,
-}) {
+function createSwaggerApiDocs(props: CreateSwaggerApiDocsProps) {
+  const { title, baseUrl, routes, extendedTags = [], definitions = undefined, responses = undefined } = props;
+
   const mergedRoutes = routes.reduce((acc, currentRoute) => deepMerge(acc, currentRoute), {});
 
   return {

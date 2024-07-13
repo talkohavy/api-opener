@@ -3,14 +3,14 @@
     // -------------------
     // Section 1: Projects
     // -------------------
-    // "incremental": true, // Save .tsbuildinfo files to allow for incremental compilation of projects.
+    "incremental": true, // Save .tsbuildinfo files to allow for incremental compilation of projects.
 
     // -----------------------------------
     // Section 2: Language and Environment
     // -----------------------------------
     "target": "ESNext", // default value is "ES3"
     "jsx": "react-jsx",
-    "lib": ["ES2022"], // adding the "DOM" library helps vs-code to recognize the window & document objects.
+    "lib": ["ESNext"], // adding the "DOM" library helps vs-code to recognize the window & document objects.
 
     // ------------------
     // Section 3: Modules
@@ -31,7 +31,7 @@
     // ---------------
     // Section 5: Emit
     // ---------------
-    "noEmit": false, // <--- defaults to true. Disable emitting files from a compilation.
+    "noEmit": true, // <--- defaults to true. Disable emitting files from a compilation.
     "declaration": true, // Generate .d.ts files from TypeScript and JavaScript files in your project.
     // "declarationMap": true, // Create sourcemaps for d.ts files.
     // "emitDeclarationOnly": true, // Only output d.ts files and not JavaScript files.
@@ -55,16 +55,16 @@
     // ------------------------
     // Section 7: Type Checking
     // ------------------------
-    "noImplicitOverride": true, // If you use inheritance, and you provide an override function, you must specify that it is an override function.
-    // "strict": true // <--- Enable all strict type-checking options.
-    "noImplicitAny": false, // <--- Enable error reporting for expressions and declarations with an implied 'any' type.
+    "strict": true, // <--- Enable all strict type-checking options.
     "strictNullChecks": true, // When type checking, take into account 'null' and 'undefined'. */
     "strictFunctionTypes": true, // When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
     "strictBindCallApply": true, // Check that the arguments for 'bind', 'call', and 'apply' methods match the original function. */
     "strictPropertyInitialization": true, // Check for class properties that are declared but not set in the constructor. */
+    "alwaysStrict": true, // Ensure 'use strict' is always emitted. */
+    "noImplicitOverride": true, // If you use inheritance, and you provide an override function, you must specify that it is an override function.
+    "noImplicitAny": true, // <--- Enable error reporting for expressions and declarations with an implied 'any' type.
     "noImplicitThis": true, // Enable error reporting when 'this' is given the type 'any'. */
     // "useUnknownInCatchVariables": true,               /* Default catch clause variables as 'unknown' instead of 'any'. */
-    "alwaysStrict": true, // Ensure 'use strict' is always emitted. */
     // "noUnusedLocals": true, // Enable error reporting when local variables aren't read.
     // "noUnusedParameters": true, // Raise an error when a function parameter isn't read.
     // "exactOptionalPropertyTypes": true,               /* Interpret optional property types as written, rather than adding 'undefined'. */
@@ -81,9 +81,8 @@
     // -----------------------
     "skipLibCheck": true,
 
-    "ignoreDeprecations": "5.0"
   },
   "compileOnSave": true,
   "exclude": ["node_modules"],
-  "include": ["src/index.js"]
+  "include": ["src/index.ts"]
 }
