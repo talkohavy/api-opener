@@ -1,5 +1,11 @@
 # api-opener
 
+## 1.0.2
+
+### Patch Changes
+
+- Types were missing from bundle. package.json pointed to wrong place for types & main file.
+
 ## 1.0.1
 
 ### Patch Changes
