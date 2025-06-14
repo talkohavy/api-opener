@@ -1,5 +1,11 @@
 # api-opener
 
+## 1.0.1
+
+### Patch Changes
+
+- Added a beautiful README.md file, covering the specs.
+
 ## 1.0.0
 
 ### Major Changes
