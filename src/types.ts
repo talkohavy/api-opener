@@ -32,7 +32,7 @@ type SwaggerBooleanFormat = {
   format?: undefined;
 };
 
-type SwaggerObjectFormat = {
+export type SwaggerObjectFormat = {
   type?: 'object';
   format?: undefined;
   required?: Array<string>;

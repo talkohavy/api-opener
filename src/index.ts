@@ -7,4 +7,6 @@ export { addResponseStatus, type AddResponseStatusProps } from './addResponseSta
 export { createApiRoute, type CreateApiRouteProps } from './createApiRoute.js';
 export { createSwaggerApiDocs, type CreateSwaggerApiDocsProps };
 
+export type * from './types.js';
+
 export default createSwaggerApiDocs;
