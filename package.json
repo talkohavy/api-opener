@@ -7,32 +7,26 @@
   "exports": {
     ".": {
       "import": {
-        "import": "./lib/index.js",
-        "types": "./index.d.ts"
+        "types": "./types/index.d.ts",
+        "default": "./index.esm.mjs"
       },
       "require": {
-        "default": "./lib/index.cjs",
-        "types": "./index.d.ts"
+        "types": "./types/index.d.ts",
+        "default": "./index.cjs.cjs"
       }
     }
   },
   "scripts": {
     "clean": "rm -rf node_modules",
-    "lint": "eslint -c ./.eslintrc.json .",
-    "lint-fix": "eslint --fix -c ./.eslintrc.json .",
+    "lint": "eslint -c eslint.config.js",
+    "lint:fix": "eslint --fix -c eslint.config.js",
+    "tsc": "tsc -p tsconfig.json",
     "format": "biome format --verbose ./src",
-    "format-fix": "biome format --verbose ./src --write",
+    "format:fix": "biome format --verbose ./src --write",
     "format-prettier": "prettier . --check --config ./.prettierrc.mjs --ignore-path .prettierignore",
-    "format-prettier-fix": "prettier . --write --config ./.prettierrc.mjs --ignore-path .prettierignore",
+    "format-prettier:fix": "prettier . --write --config ./.prettierrc.mjs --ignore-path .prettierignore",
     "build": "node ./build.config.js",
-    "test": "node --test",
-    "cs-add": "pnpm changeset add",
-    "cs-status": "pnpm changeset status --verbose",
-    "cs-bump": "npm test && pnpm changeset version",
-    "cs-publish": "npm run build && cd dist && pnpm changeset publish",
-    "old-way-preversion": "npm test",
-    "old-way-version": "npm run format-prettier-fix && npm run build",
-    "old-way-postversion": "git push && git push --tags && cd dist && npm publish"
+    "test": "node --test"
   },
   "sideEffects": false,
   "contributors": [
