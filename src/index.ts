@@ -1,10 +1,10 @@
-import { createSwaggerApiDocs } from './createSwaggerDocs.js';
+import { createSwaggerApiDocs, type CreateSwaggerApiDocsProps } from './createSwaggerDocs.js';
 
-export { addIdParamToPath } from './addIdParamToPath.js';
+export { addIdParamToPath, type AddIdParamToPathProps } from './addIdParamToPath.js';
 export { addPageParamToQuery } from './addPageParamToQuery.js';
-export { addRequestBody } from './addRequestBody.js';
-export { addResponseStatus } from './addResponseStatus.js';
-export { createApiRoute } from './createApiRoute.js';
-export { createSwaggerApiDocs };
+export { addRequestBody, type AddRequestBodyProps } from './addRequestBody.js';
+export { addResponseStatus, type AddResponseStatusProps } from './addResponseStatus.js';
+export { createApiRoute, type CreateApiRouteProps } from './createApiRoute.js';
+export { createSwaggerApiDocs, type CreateSwaggerApiDocsProps };
 
 export default createSwaggerApiDocs;

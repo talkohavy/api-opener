@@ -1,7 +1,7 @@
 import { deepMerge } from '@talkohavy/lodash';
 import type { SwaggerRoute, SwaggerTag } from './types';
 
-type CreateSwaggerApiDocsProps = {
+export type CreateSwaggerApiDocsProps = {
   title?: string;
   baseUrl: string;
   routes: Array<SwaggerRoute>;
@@ -10,7 +10,7 @@ type CreateSwaggerApiDocsProps = {
   responses?: any;
 };
 
-function createSwaggerApiDocs(props: CreateSwaggerApiDocsProps) {
+export function createSwaggerApiDocs(props: CreateSwaggerApiDocsProps) {
   const { title, baseUrl, routes, extendedTags = [], definitions = undefined, responses = undefined } = props;
 
   const mergedRoutes = routes.reduce((acc, currentRoute) => deepMerge(acc, currentRoute), {});
@@ -57,5 +57,3 @@ function createSwaggerApiDocs(props: CreateSwaggerApiDocsProps) {
     },
   };
 }
-
-export { createSwaggerApiDocs };

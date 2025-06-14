@@ -1,3 +1,5 @@
+import type { SwaggerResponse } from './common/constants';
+
 type SwaggerStringFormat = {
   type?: 'string';
   format?: 'date' | 'date-time' | 'password' | 'byte' | 'binary';
@@ -44,18 +46,12 @@ type SwaggerArrayFormat = {
   format?: undefined;
 };
 
-type SwaggerResponseContent = {
+export type SwaggerResponseContent = {
   description: string;
   content?: {
     'application/x-www-form-urlencoded': any;
     'application/json': any;
   };
-};
-
-export type AddResponseStatusProps = {
-  statusCode: number | string;
-  description: string;
-  schema?: any;
 };
 
 export type RestMethodNames = 'get' | 'post' | 'put' | 'patch' | 'delete';
@@ -81,17 +77,6 @@ export type SwaggerRequestBody = {
     'application/json'?: { schema: SwaggerSchema };
     'application/x-www-form-urlencoded'?: { schema: SwaggerSchema };
   };
-};
-
-export type SwaggerResponse = {
-  [ResponseStatusCodes.OK]?: SwaggerResponseContent;
-  [ResponseStatusCodes.CREATED]?: SwaggerResponseContent;
-  [ResponseStatusCodes.BAD_REQUEST]?: SwaggerResponseContent;
-  [ResponseStatusCodes.NOT_FOUND]?: SwaggerResponseContent;
-  [ResponseStatusCodes.UNAUTHORIZED]?: SwaggerResponseContent;
-  [ResponseStatusCodes.FORBIDDEN]?: SwaggerResponseContent;
-  [ResponseStatusCodes.INTERNAL_SERVER_ERROR]?: SwaggerResponseContent;
-  [ResponseStatusCodes.DEFAULT]?: SwaggerResponseContent;
 };
 
 export type SwaggerRoute = Record<
@@ -137,21 +122,3 @@ export type SwaggerTag =
         description?: string;
       };
     };
-
-export enum ResponseStatusCodes {
-  OK = 200,
-  CREATED = 201,
-  BAD_REQUEST = 400,
-  NOT_FOUND = 404,
-  UNAUTHORIZED = 401,
-  FORBIDDEN = 403,
-  INTERNAL_SERVER_ERROR = 500,
-  DEFAULT = 'default',
-}
-
-// export function addIdParamToPath(props: AddIdParamToPathProps): SwaggerParameter;
-// export function addPageParamToQuery(): SwaggerParameter;
-// export function addRequestBody(props: AddRequestBodyProps): SwaggerRequestBody;
-// export function addResponseStatus(props: AddResponseStatusProps): SwaggerResponse;
-// export function createApiRoute(props: CreateApiRouteProps): SwaggerRoute;
-// export function createSwaggerApiDocs(props: CreateSwaggerApiDocsProps): any;

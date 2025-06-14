@@ -1,12 +1,12 @@
-import type { ResponseStatusCodes, SwaggerResponse } from './types';
+import type { HttpStatusCodeValues, SwaggerResponse } from './common/constants';
 
-type AddResponseStatusProps = {
-  statusCode: ResponseStatusCodes;
+export type AddResponseStatusProps = {
+  statusCode: HttpStatusCodeValues;
   description: string;
   schema?: any;
 };
 
-function addResponseStatus(props: AddResponseStatusProps): SwaggerResponse {
+export function addResponseStatus(props: AddResponseStatusProps): SwaggerResponse {
   const { statusCode, description, schema } = props;
 
   const responseStatus: SwaggerResponse = { [statusCode]: { description } };
@@ -20,5 +20,3 @@ function addResponseStatus(props: AddResponseStatusProps): SwaggerResponse {
 
   return responseStatus;
 }
-
-export { addResponseStatus };

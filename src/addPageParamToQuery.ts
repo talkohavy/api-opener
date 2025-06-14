@@ -1,6 +1,6 @@
 import type { SwaggerParameter } from './types';
 
-function addPageParamToQuery(): SwaggerParameter {
+export function addPageParamToQuery(): SwaggerParameter {
   return {
     name: 'page',
     in: 'query',
@@ -9,5 +9,3 @@ function addPageParamToQuery(): SwaggerParameter {
     schema: { type: 'integer', minimum: 1 },
   };
 }
-
-export { addPageParamToQuery };

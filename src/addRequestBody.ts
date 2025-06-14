@@ -1,6 +1,6 @@
 import type { SwaggerProperty, SwaggerRequestBody, SwaggerSchema } from './types';
 
-type AddRequestBodyProps = {
+export type AddRequestBodyProps = {
   description?: string;
   isRequired?: boolean;
   requiredFields?: Array<string>;
@@ -23,7 +23,7 @@ type AddRequestBodyProps = {
  * when it's `application/json`, and the requiredFields when it's
  * `application/x-www-form-urlencoded` which checks the existence of each field.
  */
-function addRequestBody(props: AddRequestBodyProps): SwaggerRequestBody {
+export function addRequestBody(props: AddRequestBodyProps): SwaggerRequestBody {
   const { description, isRequired, requiredFields, properties, refString } = props;
 
   const schema: SwaggerSchema = properties
@@ -39,5 +39,3 @@ function addRequestBody(props: AddRequestBodyProps): SwaggerRequestBody {
     required: isRequired,
   };
 }
-
-export { addRequestBody };

@@ -1,12 +1,12 @@
 import type { SwaggerParameter } from './types';
 
-type AddIdParamToPathProps = {
+export type AddIdParamToPathProps = {
   objectName: string;
   operationName: string;
   isPositiveNumber?: boolean;
 };
 
-function addIdParamToPath(props: AddIdParamToPathProps): SwaggerParameter {
+export function addIdParamToPath(props: AddIdParamToPathProps): SwaggerParameter {
   const { objectName, operationName, isPositiveNumber = false } = props;
 
   return {
@@ -17,5 +17,3 @@ function addIdParamToPath(props: AddIdParamToPathProps): SwaggerParameter {
     schema: isPositiveNumber ? { type: 'integer', format: 'int32', minimum: 0 } : { type: 'string' },
   };
 }
-
-export { addIdParamToPath };
