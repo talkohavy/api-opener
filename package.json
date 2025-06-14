@@ -7,11 +7,11 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./types/index.d.ts",
+        "types": "./index.d.ts",
         "default": "./index.esm.mjs"
       },
       "require": {
-        "types": "./types/index.d.ts",
+        "types": "./index.d.ts",
         "default": "./index.cjs.cjs"
       }
     }
