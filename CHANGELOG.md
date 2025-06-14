@@ -1,5 +1,11 @@
 # api-opener
 
+## 1.0.3
+
+### Patch Changes
+
+- Again, types are NOT in "types" folder, but in root. Fixed.
+
 ## 1.0.2
 
 ### Patch Changes
