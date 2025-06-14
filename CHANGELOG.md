@@ -1,5 +1,11 @@
 # api-opener
 
+## 1.0.5
+
+### Patch Changes
+
+- Added keywords to package.json for better searching & finding this package.
+
 ## 1.0.4
 
 ### Patch Changes
