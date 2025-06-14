@@ -1,5 +1,11 @@
 # api-opener
 
+## 1.0.0
+
+### Major Changes
+
+- Package now has full typescript support.
+
 ## 0.1.1
 
 ### Patch Changes
