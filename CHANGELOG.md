@@ -1,5 +1,11 @@
 # api-opener
 
+## 1.0.4
+
+### Patch Changes
+
+- Now exporting all types from "types.ts".
+
 ## 1.0.3
 
 ### Patch Changes
