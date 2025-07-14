@@ -15,13 +15,48 @@ export type AddRequestBodyProps = {
 };
 
 /**
- * @description
- * IMPORTANT NOTE!!!
- * As of 27/01/2024, there is no validation on the body's properties,
- * not in `application/json` and not in `application/x-www-form-urlencoded`.
- * The only check swagger enforces is the `isRequired` for the entire body
- * when it's `application/json`, and the requiredFields when it's
- * `application/x-www-form-urlencoded` which checks the existence of each field.
+ * Creates a request body definition for OpenAPI specifications.
+ *
+ * @description This function generates a request body object that supports both inline schema
+ * definitions and schema references. It supports both JSON and form-encoded content types
+ * and includes validation for required fields and proper schema references.
+ *
+ * @param props - Configuration object for the request body
+ * @param props.description - Optional description of the request body
+ * @param props.isRequired - Whether the request body is required (defaults to false)
+ * @param props.requiredFields - Array of field names that are required when using properties
+ * @param props.properties - Object defining properties for inline schema (mutually exclusive with refString)
+ * @param props.refString - Reference string to external schema (mutually exclusive with properties)
+ *
+ * @returns A SwaggerRequestBody object with the specified configuration
+ *
+ * @throws {RequestBodyValidationError} When validation fails for parameters
+ *
+ * @example
+ * ```typescript
+ * // Using inline properties
+ * const userBody = addRequestBody({
+ *   description: 'User data for creation',
+ *   isRequired: true,
+ *   requiredFields: ['name', 'email'],
+ *   properties: {
+ *     name: { type: 'string' },
+ *     email: { type: 'string', format: 'email' },
+ *     age: { type: 'integer', minimum: 0 }
+ *   }
+ * });
+ *
+ * // Using schema reference
+ * const userBody = addRequestBody({
+ *   description: 'User data for creation',
+ *   isRequired: true,
+ *   refString: '#/components/schemas/User'
+ * });
+ * ```
+ *
+ * @note As of the current implementation, OpenAPI/Swagger does not validate
+ * individual properties in the request body - only the overall structure
+ * and required field existence is checked.
  */
 export function addRequestBody(props: AddRequestBodyProps): SwaggerRequestBody {
   const { description, isRequired, requiredFields, properties, refString } = props;

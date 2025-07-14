@@ -56,9 +56,8 @@ const getUserRoute = createApiRoute({
   description: 'Retrieve a single user by their unique identifier',
   parameters: [
     addIdParamToPath({
-      objectName: 'user',
-      operationName: 'retrieve',
-      isPositiveNumber: true
+      description: 'Unique identifier for the user',
+      schema: { type: 'string', pattern: '^[0-9]+$' }
     })
   ]
 });
@@ -127,11 +126,23 @@ Creates a complete OpenAPI 3.1.0 specification document.
 ```typescript
 type CreateSwaggerApiDocsProps = {
   title?: string;
+  description?: string;
+  version?: string;
   baseUrl: string;
   routes: Array<SwaggerRoute>;
   extendedTags?: Array<SwaggerTag>;
   definitions?: any;
   responses?: any;
+  contact?: {
+    name?: string;
+    url?: string;
+    email?: string;
+  };
+  license?: {
+    name?: string;
+    url?: string;
+  };
+  termsOfService?: string;
 };
 ```
 
@@ -161,9 +172,8 @@ Creates a standardized ID parameter for path routes.
 
 ```typescript
 type AddIdParamToPathProps = {
-  objectName: string;        // e.g., 'user', 'product'
-  operationName: string;     // e.g., 'retrieve', 'update', 'delete'
-  isPositiveNumber?: boolean; // Use integer type instead of string
+  description?: string;    // Optional description (defaults to "ID of the resource")
+  schema?: SwaggerSchema;  // Optional schema definition (defaults to string type)
 };
 ```
 
@@ -202,6 +212,41 @@ type AddResponseStatusProps = {
 };
 ```
 
+#### `HttpStatusCodes`
+
+Pre-defined HTTP status codes for use in responses.
+
+```typescript
+export const HttpStatusCodes = {
+  // 2xx Success
+  OK: 200,
+  CREATED: 201,
+  ACCEPTED: 202,
+  NO_CONTENT: 204,
+
+  // 4xx Client Error
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  METHOD_NOT_ALLOWED: 405,
+  NOT_ACCEPTABLE: 406,
+  CONFLICT: 409,
+  UNPROCESSABLE_ENTITY: 422,
+  TOO_MANY_REQUESTS: 429,
+
+  // 5xx Server Error
+  INTERNAL_SERVER: 500,
+  NOT_IMPLEMENTED: 501,
+  BAD_GATEWAY: 502,
+  SERVICE_UNAVAILABLE: 503,
+  GATEWAY_TIMEOUT: 504,
+
+  // Default
+  DEFAULT: 'default',
+} as const;
+```
+
 ## 💡 Examples
 
 ### Basic CRUD API
@@ -232,9 +277,8 @@ const getUserRoute = createApiRoute({
   summary: 'Get user by ID',
   parameters: [
     addIdParamToPath({
-      objectName: 'user',
-      operationName: 'retrieve',
-      isPositiveNumber: true
+      description: 'Unique identifier for the user',
+      schema: { type: 'integer', minimum: 1 }
     })
   ]
 });
@@ -269,9 +313,8 @@ const updateUserRoute = createApiRoute({
   summary: 'Update user',
   parameters: [
     addIdParamToPath({
-      objectName: 'user',
-      operationName: 'update',
-      isPositiveNumber: true
+      description: 'Unique identifier for the user to update',
+      schema: { type: 'integer', minimum: 1 }
     })
   ],
   requestBody: addRequestBody({
@@ -292,9 +335,8 @@ const deleteUserRoute = createApiRoute({
   summary: 'Delete user',
   parameters: [
     addIdParamToPath({
-      objectName: 'user',
-      operationName: 'delete',
-      isPositiveNumber: true
+      description: 'Unique identifier for the user to delete',
+      schema: { type: 'integer', minimum: 1 }
     })
   ]
 });
@@ -316,6 +358,14 @@ const apiSpec = createSwaggerApiDocs({
 ### Using Schema References
 
 ```typescript
+import {
+  createSwaggerApiDocs,
+  createApiRoute,
+  addRequestBody,
+  addResponseStatus,
+  HttpStatusCodes
+} from 'api-opener';
+
 const createProductRoute = createApiRoute({
   route: '/products',
   method: 'post',
@@ -325,21 +375,42 @@ const createProductRoute = createApiRoute({
     description: 'Product data',
     isRequired: true,
     refString: '#/components/schemas/Product'  // Reference external schema
-  })
+  }),
+  responses: {
+    [HttpStatusCodes.CREATED]: {
+      description: 'Product created successfully',
+      content: {
+        'application/json': {
+          schema: { $ref: '#/components/schemas/Product' }
+        }
+      }
+    },
+    [HttpStatusCodes.BAD_REQUEST]: {
+      description: 'Invalid product data'
+    }
+  }
 });
 
 const apiSpec = createSwaggerApiDocs({
   title: 'E-commerce API',
+  description: 'API for managing products and orders',
+  version: '1.0.0',
   baseUrl: 'https://api.shop.com',
   routes: [createProductRoute],
+  contact: {
+    name: 'API Support',
+    email: 'support@shop.com'
+  },
   definitions: {
     Product: {
       type: 'object',
       required: ['name', 'price'],
       properties: {
-        name: { type: 'string' },
+        id: { type: 'integer', readOnly: true },
+        name: { type: 'string', minLength: 1, maxLength: 100 },
         price: { type: 'number', minimum: 0 },
-        category: { type: 'string' }
+        category: { type: 'string' },
+        createdAt: { type: 'string', format: 'date-time', readOnly: true }
       }
     }
   }

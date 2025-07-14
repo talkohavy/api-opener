@@ -12,6 +12,64 @@ export type CreateApiRouteProps = {
   tag?: SwaggerTag;
 } & Omit<SwaggerRouteMethod, 'tags'>;
 
+/**
+ * Creates an API route definition for OpenAPI specifications.
+ *
+ * @description This function generates a complete OpenAPI route definition with all the
+ * necessary properties including path, method, parameters, request body, responses, and
+ * security requirements. It validates the route format and HTTP method to ensure compliance
+ * with OpenAPI standards.
+ *
+ * @param props - Configuration object for the API route
+ * @param props.route - URL path for the route (must start with '/'), supports path parameters with {param} syntax
+ * @param props.method - HTTP method (get, post, put, patch, delete)
+ * @param props.tag - Optional tag for grouping routes (defaults to 'Rest')
+ * @param props.summary - Optional short summary of the route
+ * @param props.description - Optional detailed description of the route
+ * @param props.operationId - Optional unique identifier for the operation
+ * @param props.parameters - Optional array of parameters (query, path, header)
+ * @param props.requestBody - Optional request body definition
+ * @param props.responses - Optional response definitions
+ * @param props.security - Optional security requirements
+ *
+ * @returns A SwaggerRoute object representing the complete API route
+ *
+ * @throws {ApiRouteValidationError} When route format or method is invalid
+ *
+ * @example
+ * ```typescript
+ * // Basic route
+ * const getUserRoute = createApiRoute({
+ *   route: '/users/{id}',
+ *   method: 'get',
+ *   summary: 'Get user by ID',
+ *   parameters: [addIdParamToPath({ description: 'User ID' })],
+ *   responses: {
+ *     200: { description: 'User found', schema: { $ref: '#/components/schemas/User' } }
+ *   }
+ * });
+ *
+ * // Complete route with all properties
+ * const createUserRoute = createApiRoute({
+ *   route: '/users',
+ *   method: 'post',
+ *   tag: 'Users',
+ *   summary: 'Create a new user',
+ *   description: 'Creates a new user account with the provided information',
+ *   operationId: 'createUser',
+ *   requestBody: addRequestBody({
+ *     description: 'User data',
+ *     isRequired: true,
+ *     refString: '#/components/schemas/CreateUserRequest'
+ *   }),
+ *   responses: {
+ *     201: { description: 'User created successfully' },
+ *     400: { description: 'Invalid input data' }
+ *   },
+ *   security: [{ bearerAuth: [] }]
+ * });
+ * ```
+ */
 export function createApiRoute(props: CreateApiRouteProps): SwaggerRoute {
   const { route, method, tag, summary, description, operationId, parameters, requestBody, responses, security } = props;
 
