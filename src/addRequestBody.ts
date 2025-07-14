@@ -26,6 +26,8 @@ export type AddRequestBodyProps = {
 export function addRequestBody(props: AddRequestBodyProps): SwaggerRequestBody {
   const { description, isRequired, requiredFields, properties, refString } = props;
 
+  validateRequestBody(props);
+
   const schema: SwaggerSchema = properties
     ? { type: 'object', required: requiredFields, properties }
     : { $ref: refString! };
@@ -38,4 +40,80 @@ export function addRequestBody(props: AddRequestBodyProps): SwaggerRequestBody {
     },
     required: isRequired,
   };
+}
+
+function validateRequestBody(props: AddRequestBodyProps): void {
+  const { properties, refString, requiredFields } = props;
+
+  // Must have either properties or refString, but not both
+  if (!properties && !refString) {
+    throw new RequestBodyValidationError('Either properties or refString must be provided', 'properties');
+  }
+
+  if (properties && refString) {
+    throw new RequestBodyValidationError('Cannot use both properties and refString. Choose one', 'properties');
+  }
+
+  // Validate refString format
+  if (refString) {
+    if (!refString.startsWith('#/')) {
+      throw new RequestBodyValidationError('refString must start with "#/" for local references', 'refString');
+    }
+
+    // Basic validation for OpenAPI reference format
+    const refPattern = /^#\/(components\/schemas\/[a-zA-Z0-9_-]+|definitions\/[a-zA-Z0-9_-]+)$/;
+    if (!refPattern.test(refString)) {
+      throw new RequestBodyValidationError(
+        'refString must follow OpenAPI reference format: #/components/schemas/SchemaName or #/definitions/SchemaName',
+        'refString',
+      );
+    }
+  }
+
+  if (properties) {
+    if (typeof properties !== 'object' || Array.isArray(properties)) {
+      throw new RequestBodyValidationError('Properties must be an object', 'properties');
+    }
+
+    if (Object.keys(properties).length === 0) {
+      throw new RequestBodyValidationError('Properties object cannot be empty', 'properties');
+    }
+
+    // Validate each property
+    Object.entries(properties).forEach(([key, value]) => {
+      if (!key || key.trim() === '') {
+        throw new RequestBodyValidationError('Property name cannot be empty', 'properties');
+      }
+
+      if (!value || typeof value !== 'object') {
+        throw new RequestBodyValidationError(`Property "${key}" must be an object`, 'properties');
+      }
+    });
+  }
+
+  // Validate required fields
+  if (requiredFields && properties) {
+    if (!Array.isArray(requiredFields)) {
+      throw new RequestBodyValidationError('requiredFields must be an array', 'requiredFields');
+    }
+
+    const propertyNames = Object.keys(properties);
+    const invalidFields = requiredFields.filter((field) => !propertyNames.includes(field));
+    if (invalidFields.length > 0) {
+      throw new RequestBodyValidationError(
+        `Required fields [${invalidFields.join(', ')}] not found in properties`,
+        'requiredFields',
+      );
+    }
+  }
+}
+
+class RequestBodyValidationError extends Error {
+  constructor(
+    message: string,
+    public field: string,
+  ) {
+    super(message);
+    this.name = 'RequestBodyValidationError';
+  }
 }

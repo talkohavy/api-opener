@@ -1,4 +1,4 @@
-import type { RestMethodNames, SwaggerRoute, SwaggerRouteMethod, SwaggerTag } from './types.js';
+import type { RestMethodNames, SwaggerRoute, SwaggerRouteMethod, SwaggerTag } from './types';
 
 export type CreateApiRouteProps = {
   /**
@@ -14,6 +14,9 @@ export type CreateApiRouteProps = {
 
 export function createApiRoute(props: CreateApiRouteProps): SwaggerRoute {
   const { route, method, tag, summary, description, operationId, parameters, requestBody, responses, security } = props;
+
+  validateRoute(route);
+  validateMethod(method);
 
   const routeProps: SwaggerRouteMethod = {} as any;
 
@@ -62,4 +65,61 @@ export function createApiRoute(props: CreateApiRouteProps): SwaggerRoute {
   const swaggerRoute = { [route]: { [method]: routeProps } };
 
   return swaggerRoute;
+}
+
+function validateRoute(route: string): void {
+  if (!route) {
+    throw new ApiRouteValidationError('Route cannot be empty', 'route');
+  }
+
+  if (!route.startsWith('/')) {
+    throw new ApiRouteValidationError('Route must start with a forward slash "/"', 'route');
+  }
+
+  // Check for invalid characters
+  const invalidChars = /[<>]/;
+  if (invalidChars.test(route)) {
+    throw new ApiRouteValidationError(
+      'Route contains invalid characters. Use {paramName} for path parameters',
+      'route',
+    );
+  }
+
+  // Check for proper path parameter format
+  const pathParamRegex = /\{([^}]*)\}/g;
+  let match: RegExpExecArray | null;
+  while ((match = pathParamRegex.exec(route)) !== null) {
+    const paramName = match[1];
+    if (!paramName || paramName.trim() === '') {
+      throw new ApiRouteValidationError('Path parameter name cannot be empty', 'route');
+    }
+
+    // Check for valid parameter name (alphanumeric, underscore, hyphen)
+    if (!/^[a-zA-Z0-9_-]+$/.test(paramName)) {
+      throw new ApiRouteValidationError(
+        `Invalid path parameter name "${paramName}". Use only alphanumeric characters, underscores, and hyphens`,
+        'route',
+      );
+    }
+  }
+}
+
+function validateMethod(method: RestMethodNames): void {
+  const validMethods: RestMethodNames[] = ['get', 'post', 'put', 'patch', 'delete'];
+  if (!validMethods.includes(method)) {
+    throw new ApiRouteValidationError(
+      `Invalid HTTP method "${method}". Must be one of: ${validMethods.join(', ')}`,
+      'method',
+    );
+  }
+}
+
+class ApiRouteValidationError extends Error {
+  constructor(
+    message: string,
+    public field: string,
+  ) {
+    super(message);
+    this.name = 'ApiRouteValidationError';
+  }
 }
