@@ -1,6 +1,6 @@
 {
   "name": "api-opener",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "type": "module",
   "description": "Design your API easily with Swagger Open-Api specification.",
   "private": "true",
