@@ -2,6 +2,18 @@ import { createSwaggerApiDocs, type CreateSwaggerApiDocsProps } from './createSw
 
 export { addIdParamToPath, type AddIdParamToPathProps } from './addIdParamToPath';
 export { addPageParamToQuery } from './addPageParamToQuery';
+export { addLimitParamToQuery, type AddLimitParamToQueryProps } from './addLimitParamToQuery';
+export { addOffsetParamToQuery, type AddOffsetParamToQueryProps } from './addOffsetParamToQuery';
+export { addSortParamToQuery, type AddSortParamToQueryProps } from './addSortParamToQuery';
+export { addFilterParamToQuery, type AddFilterParamToQueryProps } from './addFilterParamToQuery';
+export {
+  addHeaderParam,
+  addAuthorizationHeader,
+  addApiKeyHeader,
+  addContentTypeHeader,
+  type AddHeaderParamProps,
+} from './addHeaderParam';
+export { addPaginationParams, type AddPaginationParamsProps } from './addPaginationParams';
 export { addRequestBody, type AddRequestBodyProps } from './addRequestBody';
 export { addResponseStatus, type AddResponseStatusProps } from './addResponseStatus';
 export { createApiRoute, type CreateApiRouteProps } from './createApiRoute';

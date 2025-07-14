@@ -28,6 +28,7 @@
     "format-prettier:fix": "prettier . --write --config ./.prettierrc.mjs --ignore-path .prettierignore",
     "build": "node ./build.config.js",
     "test": "tsx --test src/**/*.test.ts",
+    "test:cov": "tsx --test --experimental-test-coverage src/**/*.test.ts",
     "test:watch": "tsx --test --watch src/**/*.test.ts"
   },
   "sideEffects": false,
