@@ -52,6 +52,7 @@ export type SwaggerResponseContent = {
     'application/x-www-form-urlencoded': any;
     'application/json': any;
   };
+  headers?: Record<string, { description?: string; schema?: any; required?: boolean }>;
 };
 
 export type RestMethodNames = 'get' | 'post' | 'put' | 'patch' | 'delete';

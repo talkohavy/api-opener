@@ -18,17 +18,10 @@ export { addRequestBody, type AddRequestBodyProps } from './addRequestBody';
 export { addResponseStatus, type AddResponseStatusProps } from './addResponseStatus';
 export { createApiRoute, type CreateApiRouteProps } from './createApiRoute';
 export { createSwaggerApiDocs, type CreateSwaggerApiDocsProps };
-export {
-  createSuccessResponse,
-  createCreatedResponse,
-  createBadRequestResponse,
-  createUnauthorizedResponse,
-  createNotFoundResponse,
-  createInternalServerErrorResponse,
-  mergeResponses,
-} from './common/utils';
+export * from './common/utils';
 export { HttpStatusCodes } from './common/constants';
 
+export type { ResponseConfig } from './common/utils/createResponse';
 export type * from './types';
 
 export default createSwaggerApiDocs;
