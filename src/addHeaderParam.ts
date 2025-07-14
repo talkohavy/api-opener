@@ -14,7 +14,7 @@ export type AddHeaderParamProps = {
  * Common use cases include API keys, authorization tokens, content types, and custom headers.
  *
  * @param props - Configuration object for the header parameter
- * @param props.name - The name of the header parameter (e.g., 'Authorization', 'X-API-Key')
+ * @param props.name - The name of the header parameter (e.g., 'Authorization', 'x-api-key')
  * @param props.description - Optional description of the header
  * @param props.required - Whether the header is required (defaults to false)
  * @param props.schema - Optional schema definition for the header value
@@ -25,7 +25,7 @@ export type AddHeaderParamProps = {
  * ```typescript
  * // API Key header
  * const apiKeyHeader = addHeaderParam({
- *   name: 'X-API-Key',
+ *   name: 'x-api-key',
  *   description: 'API key for authentication',
  *   required: true,
  *   schema: { type: 'string' }
@@ -101,12 +101,12 @@ export function addAuthorizationHeader(
 }
 
 /**
- * Creates a standardized X-API-Key header parameter.
+ * Creates a standardized x-api-key header parameter.
  *
  * @param description - Optional description (defaults to "API key for authentication")
  * @param required - Whether the header is required (defaults to true)
  *
- * @returns A SwaggerParameter object representing the X-API-Key header
+ * @returns A SwaggerParameter object representing the x-api-key header
  *
  * @example
  * ```typescript

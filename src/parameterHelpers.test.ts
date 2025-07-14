@@ -197,7 +197,7 @@ describe('addApiKeyHeader', () => {
   it('should create API key header with defaults', () => {
     const result = addApiKeyHeader();
 
-    assert.strictEqual(result.name, 'X-API-Key');
+    assert.strictEqual(result.name, 'x-api-key');
     assert.strictEqual(result.in, 'header');
     assert.strictEqual(result.required, true);
     assert.strictEqual(result.description, 'API key for authentication');

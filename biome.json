@@ -11,7 +11,8 @@
         "noExplicitAny": "off",
         "noGlobalIsNan": "off",
         "noAssignInExpressions": "off",
-        "noArrayIndexKey": "off"
+        "noArrayIndexKey": "off",
+        "noThenProperty": "off"
       },
       "correctness": {
         "useExhaustiveDependencies": "off"
