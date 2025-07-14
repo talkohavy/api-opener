@@ -86,7 +86,6 @@
 
 ### 5. **Package Issues**
 
-- Package marked as `"private": "true"` but should be public
 - Missing important HTTP status codes
 - File extensions inconsistency (`.js` imports in `.ts` files)
 

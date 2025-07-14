@@ -32,7 +32,6 @@ _Added: July 14, 2025_
 
 _Added: July 14, 2025_
 
-- [ ] Remove `"private": "true"` from package.json
 - [ ] Fix file extension issues (.js imports in .ts files)
 - [ ] Ensure proper ESM/CJS dual export
 
