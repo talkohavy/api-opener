@@ -6,6 +6,7 @@ export { addRequestBody, type AddRequestBodyProps } from './addRequestBody.js';
 export { addResponseStatus, type AddResponseStatusProps } from './addResponseStatus.js';
 export { createApiRoute, type CreateApiRouteProps } from './createApiRoute.js';
 export { createSwaggerApiDocs, type CreateSwaggerApiDocsProps };
+export { HttpStatusCodes } from './common/constants.js';
 
 export type * from './types.js';
 

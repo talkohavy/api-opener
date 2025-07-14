@@ -1,6 +1,4 @@
 import type { RestMethodNames, SwaggerRoute, SwaggerRouteMethod, SwaggerTag } from './types.js';
-import { addResponseStatus } from './addResponseStatus.js';
-import { HttpStatusCodes } from './common/constants.js';
 
 export type CreateApiRouteProps = {
   /**
@@ -15,7 +13,7 @@ export type CreateApiRouteProps = {
 } & Omit<SwaggerRouteMethod, 'tags'>;
 
 export function createApiRoute(props: CreateApiRouteProps): SwaggerRoute {
-  const { route, method, tag, summary, description, operationId, parameters, requestBody, security } = props;
+  const { route, method, tag, summary, description, operationId, parameters, requestBody, responses, security } = props;
 
   const routeProps: SwaggerRouteMethod = {} as any;
 
@@ -48,48 +46,19 @@ export function createApiRoute(props: CreateApiRouteProps): SwaggerRoute {
   }
 
   // Step 7: attach responses
-  routeProps.responses = {
-    ...addResponseStatus({
-      statusCode: HttpStatusCodes.OK,
-      description: 'A successful request.',
-      // schema: responses?.[200]?.schema,
-    }),
-    ...addResponseStatus({
-      statusCode: HttpStatusCodes.CREATED,
-      description: 'Resource was created successfully.',
-      // schema: responses?.[201]?.schema,
-    }),
-    ...addResponseStatus({
-      statusCode: HttpStatusCodes.BAD_REQUEST,
-      description: 'Validation error...',
-      // schema: responses?.[400]?.schema,
-    }),
-    ...addResponseStatus({
-      statusCode: HttpStatusCodes.NOT_FOUND,
-      description: 'Resource not found.',
-      // schema: responses?.[404]?.schema,
-    }),
-    ...addResponseStatus({
-      statusCode: HttpStatusCodes.INTERNAL_SERVER_ERROR,
-      description: 'Internal server error.',
-      // schema: responses?.[500]?.schema,
-    }),
-    ...addResponseStatus({
-      statusCode: HttpStatusCodes.DEFAULT,
-      description: 'Unexpected error',
-      schema: { type: 'object', properties: { error: { type: 'string', example: 'oops...' } } },
-    }),
-  };
+  if (responses) {
+    routeProps.responses = responses;
+  }
 
   // routeProps.consumes = ['application/json']; // <--- this belongs to OpenAPI 2.0! It was replaced by `requestBody.content` map which maps the media types to their schemas!
   // routeProps.produces = ['application/json', 'application/xml'];
 
-  // Step 9: attach security
+  // Step 8: attach security
   if (security) {
     routeProps.security = security;
   }
 
-  // Step 10: create swagger api route
+  // Step 9: create swagger api route
   const swaggerRoute = { [route]: { [method]: routeProps } };
 
   return swaggerRoute;

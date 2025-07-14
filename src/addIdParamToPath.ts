@@ -1,19 +1,18 @@
-import type { SwaggerParameter } from './types';
+import type { SwaggerParameter, SwaggerSchema } from './types';
 
 export type AddIdParamToPathProps = {
-  objectName: string;
-  operationName: string;
-  isPositiveNumber?: boolean;
+  description?: string;
+  schema?: SwaggerSchema;
 };
 
 export function addIdParamToPath(props: AddIdParamToPathProps): SwaggerParameter {
-  const { objectName, operationName, isPositiveNumber = false } = props;
+  const { description, schema } = props;
 
   return {
     name: 'id',
     in: 'path',
-    description: `ID of ${objectName} to ${operationName}`,
+    description: description || 'ID of the resource',
     required: true,
-    schema: isPositiveNumber ? { type: 'integer', format: 'int32', minimum: 0 } : { type: 'string' },
+    schema: schema ?? { type: 'string' },
   };
 }
