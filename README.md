@@ -56,9 +56,8 @@ const getUserRoute = createApiRoute({
   description: 'Retrieve a single user by their unique identifier',
   parameters: [
     addIdParamToPath({
-      objectName: 'user',
-      operationName: 'retrieve',
-      isPositiveNumber: true
+      description: 'Unique identifier for the user',
+      schema: { type: 'string', pattern: '^[0-9]+$' }
     })
   ]
 });
@@ -127,11 +126,23 @@ Creates a complete OpenAPI 3.1.0 specification document.
 ```typescript
 type CreateSwaggerApiDocsProps = {
   title?: string;
+  description?: string;
+  version?: string;
   baseUrl: string;
   routes: Array<SwaggerRoute>;
   extendedTags?: Array<SwaggerTag>;
   definitions?: any;
   responses?: any;
+  contact?: {
+    name?: string;
+    url?: string;
+    email?: string;
+  };
+  license?: {
+    name?: string;
+    url?: string;
+  };
+  termsOfService?: string;
 };
 ```
 
@@ -161,9 +172,8 @@ Creates a standardized ID parameter for path routes.
 
 ```typescript
 type AddIdParamToPathProps = {
-  objectName: string;        // e.g., 'user', 'product'
-  operationName: string;     // e.g., 'retrieve', 'update', 'delete'
-  isPositiveNumber?: boolean; // Use integer type instead of string
+  description?: string;    // Optional description (defaults to "ID of the resource")
+  schema?: SwaggerSchema;  // Optional schema definition (defaults to string type)
 };
 ```
 
@@ -202,6 +212,107 @@ type AddResponseStatusProps = {
 };
 ```
 
+#### `HttpStatusCodes`
+
+Pre-defined HTTP status codes for use in responses.
+
+```typescript
+export const HttpStatusCodes = {
+  // 2xx Success
+  OK: 200,
+  CREATED: 201,
+  ACCEPTED: 202,
+  NO_CONTENT: 204,
+
+  // 4xx Client Error
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  METHOD_NOT_ALLOWED: 405,
+  NOT_ACCEPTABLE: 406,
+  CONFLICT: 409,
+  UNPROCESSABLE_ENTITY: 422,
+  TOO_MANY_REQUESTS: 429,
+
+  // 5xx Server Error
+  INTERNAL_SERVER: 500,
+  NOT_IMPLEMENTED: 501,
+  BAD_GATEWAY: 502,
+  SERVICE_UNAVAILABLE: 503,
+  GATEWAY_TIMEOUT: 504,
+
+  // Default
+  DEFAULT: 'default',
+} as const;
+```
+
+### Response Helper Functions
+
+#### `createSuccessResponse(description, schema?)`
+
+Creates a standardized 200 OK response.
+
+```typescript
+const response = createSuccessResponse('User retrieved successfully', {
+  $ref: '#/components/schemas/User'
+});
+```
+
+#### `createCreatedResponse(description, schema?)`
+
+Creates a standardized 201 Created response.
+
+```typescript
+const response = createCreatedResponse('User created successfully', {
+  $ref: '#/components/schemas/User'
+});
+```
+
+#### `createBadRequestResponse(description?, schema?)`
+
+Creates a standardized 400 Bad Request response.
+
+```typescript
+const response = createBadRequestResponse('Invalid user data provided');
+```
+
+#### `createUnauthorizedResponse(description?, schema?)`
+
+Creates a standardized 401 Unauthorized response.
+
+```typescript
+const response = createUnauthorizedResponse('Authentication required');
+```
+
+#### `createNotFoundResponse(description?, schema?)`
+
+Creates a standardized 404 Not Found response.
+
+```typescript
+const response = createNotFoundResponse('User not found');
+```
+
+#### `createInternalServerErrorResponse(description?, schema?)`
+
+Creates a standardized 500 Internal Server Error response.
+
+```typescript
+const response = createInternalServerErrorResponse('Database connection failed');
+```
+
+#### `mergeResponses(...responses)`
+
+Merges multiple response objects into a single responses object.
+
+```typescript
+const responses = mergeResponses(
+  createSuccessResponse('User found', { $ref: '#/components/schemas/User' }),
+  createNotFoundResponse('User not found'),
+  createInternalServerErrorResponse()
+);
+```
+
 ## 💡 Examples
 
 ### Basic CRUD API
@@ -232,9 +343,8 @@ const getUserRoute = createApiRoute({
   summary: 'Get user by ID',
   parameters: [
     addIdParamToPath({
-      objectName: 'user',
-      operationName: 'retrieve',
-      isPositiveNumber: true
+      description: 'Unique identifier for the user',
+      schema: { type: 'integer', minimum: 1 }
     })
   ]
 });
@@ -269,9 +379,8 @@ const updateUserRoute = createApiRoute({
   summary: 'Update user',
   parameters: [
     addIdParamToPath({
-      objectName: 'user',
-      operationName: 'update',
-      isPositiveNumber: true
+      description: 'Unique identifier for the user to update',
+      schema: { type: 'integer', minimum: 1 }
     })
   ],
   requestBody: addRequestBody({
@@ -292,9 +401,8 @@ const deleteUserRoute = createApiRoute({
   summary: 'Delete user',
   parameters: [
     addIdParamToPath({
-      objectName: 'user',
-      operationName: 'delete',
-      isPositiveNumber: true
+      description: 'Unique identifier for the user to delete',
+      schema: { type: 'integer', minimum: 1 }
     })
   ]
 });
@@ -313,9 +421,116 @@ const apiSpec = createSwaggerApiDocs({
 });
 ```
 
-### Using Schema References
+### Using Response Helper Functions
 
 ```typescript
+import {
+  createSwaggerApiDocs,
+  createApiRoute,
+  addRequestBody,
+  addIdParamToPath,
+  createSuccessResponse,
+  createCreatedResponse,
+  createBadRequestResponse,
+  createNotFoundResponse,
+  createUnauthorizedResponse,
+  mergeResponses,
+  HttpStatusCodes
+} from 'api-opener';
+
+// Create user route with comprehensive responses
+const createUserRoute = createApiRoute({
+  route: '/users',
+  method: 'post',
+  tag: 'Users',
+  summary: 'Create a new user',
+  requestBody: addRequestBody({
+    description: 'User creation data',
+    isRequired: true,
+    requiredFields: ['email', 'name'],
+    properties: {
+      name: { type: 'string', minLength: 1, maxLength: 100 },
+      email: { type: 'string', format: 'email' },
+      role: { type: 'string', enum: ['admin', 'user'], default: 'user' }
+    }
+  }),
+  responses: mergeResponses(
+    createCreatedResponse('User created successfully', {
+      $ref: '#/components/schemas/User'
+    }),
+    createBadRequestResponse('Invalid user data provided', {
+      $ref: '#/components/schemas/ValidationError'
+    }),
+    createUnauthorizedResponse('Authentication required')
+  )
+});
+
+// Get user route with error handling
+const getUserRoute = createApiRoute({
+  route: '/users/{id}',
+  method: 'get',
+  tag: 'Users',
+  summary: 'Get user by ID',
+  parameters: [
+    addIdParamToPath({
+      description: 'Unique identifier for the user',
+      schema: { type: 'integer', minimum: 1 }
+    })
+  ],
+  responses: mergeResponses(
+    createSuccessResponse('User retrieved successfully', {
+      $ref: '#/components/schemas/User'
+    }),
+    createNotFoundResponse('User not found'),
+    createBadRequestResponse('Invalid user ID format')
+  )
+});
+
+const apiSpec = createSwaggerApiDocs({
+  title: 'User Management API',
+  description: 'Complete API for user management with proper error handling',
+  version: '1.0.0',
+  baseUrl: 'https://api.myapp.com/v1',
+  routes: [createUserRoute, getUserRoute],
+  contact: {
+    name: 'API Team',
+    email: 'api@myapp.com'
+  },
+  definitions: {
+    User: {
+      type: 'object',
+      required: ['id', 'name', 'email'],
+      properties: {
+        id: { type: 'integer', readOnly: true },
+        name: { type: 'string', minLength: 1, maxLength: 100 },
+        email: { type: 'string', format: 'email' },
+        role: { type: 'string', enum: ['admin', 'user'] },
+        createdAt: { type: 'string', format: 'date-time', readOnly: true }
+      }
+    },
+    ValidationError: {
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+        field: { type: 'string' },
+        code: { type: 'string' }
+      }
+    }
+  }
+});
+```
+
+### Advanced Schema Composition
+
+```typescript
+import {
+  createSwaggerApiDocs,
+  createApiRoute,
+  addRequestBody,
+  addResponseStatus,
+  HttpStatusCodes
+} from 'api-opener';
+
 const createProductRoute = createApiRoute({
   route: '/products',
   method: 'post',
@@ -325,21 +540,42 @@ const createProductRoute = createApiRoute({
     description: 'Product data',
     isRequired: true,
     refString: '#/components/schemas/Product'  // Reference external schema
-  })
+  }),
+  responses: {
+    [HttpStatusCodes.CREATED]: {
+      description: 'Product created successfully',
+      content: {
+        'application/json': {
+          schema: { $ref: '#/components/schemas/Product' }
+        }
+      }
+    },
+    [HttpStatusCodes.BAD_REQUEST]: {
+      description: 'Invalid product data'
+    }
+  }
 });
 
 const apiSpec = createSwaggerApiDocs({
   title: 'E-commerce API',
+  description: 'API for managing products and orders',
+  version: '1.0.0',
   baseUrl: 'https://api.shop.com',
   routes: [createProductRoute],
+  contact: {
+    name: 'API Support',
+    email: 'support@shop.com'
+  },
   definitions: {
     Product: {
       type: 'object',
       required: ['name', 'price'],
       properties: {
-        name: { type: 'string' },
+        id: { type: 'integer', readOnly: true },
+        name: { type: 'string', minLength: 1, maxLength: 100 },
         price: { type: 'number', minimum: 0 },
-        category: { type: 'string' }
+        category: { type: 'string' },
+        createdAt: { type: 'string', format: 'date-time', readOnly: true }
       }
     }
   }
@@ -365,6 +601,98 @@ const route: SwaggerRoute = createApiRoute({
   method: 'post',
   // TypeScript will enforce correct property types
 });
+```
+
+## 🛠️ Troubleshooting
+
+### Common Issues
+
+#### Import/Export Errors
+
+If you encounter import errors, ensure you're using the correct import syntax:
+
+```typescript
+// ✅ Correct - Named imports
+import { createSwaggerApiDocs, createApiRoute } from 'api-opener';
+
+// ✅ Correct - Default import
+import createSwaggerApiDocs from 'api-opener';
+
+// ❌ Incorrect - Mixed syntax
+import createSwaggerApiDocs, { createApiRoute } from 'api-opener';
+```
+
+#### Route Format Errors
+
+Routes must follow specific patterns:
+
+```typescript
+// ✅ Correct route formats
+'/users'
+'/users/{id}'
+'/api/v1/users/{userId}/posts/{postId}'
+
+// ❌ Incorrect route formats
+'users'           // Missing leading slash
+'/users/<id>'     // Use {id} instead of <id>
+'/users/:id'      // Use {id} instead of :id
+```
+
+#### Schema Reference Errors
+
+When using schema references, ensure proper format:
+
+```typescript
+// ✅ Correct reference formats
+'#/components/schemas/User'
+'#/definitions/User'
+
+// ❌ Incorrect reference formats
+'User'                    // Missing reference prefix
+'#/schemas/User'          // Wrong path
+'components/schemas/User' // Missing hash
+```
+
+#### TypeScript Errors
+
+If you encounter TypeScript errors, ensure:
+
+1. You're using TypeScript 4.0 or higher
+2. You have proper type imports
+3. Your tsconfig.json includes the necessary lib files
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020"],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true
+  }
+}
+```
+
+### Performance Tips
+
+1. **Reuse Helper Functions**: Create helper functions for common patterns
+2. **Use Schema References**: Reference schemas instead of inline definitions for better performance
+3. **Batch Route Creation**: Create multiple routes at once instead of individual calls
+
+```typescript
+// ✅ Efficient approach
+const userRoutes = [
+  createApiRoute(getUserConfig),
+  createApiRoute(createUserConfig),
+  createApiRoute(updateUserConfig)
+];
+
+// ❌ Less efficient
+const getUserRoute = createApiRoute(getUserConfig);
+const createUserRoute = createApiRoute(createUserConfig);
+const updateUserRoute = createApiRoute(updateUserConfig);
 ```
 
 ## 🤝 Contributing

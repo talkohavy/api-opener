@@ -2,14 +2,20 @@ import type { SwaggerResponse } from './common/constants';
 
 type SwaggerStringFormat = {
   type?: 'string';
-  format?: 'date' | 'date-time' | 'password' | 'byte' | 'binary';
+  format?: 'date' | 'date-time' | 'password' | 'byte' | 'binary' | 'email' | 'uuid';
   minLength?: number;
   maxLength?: number;
+  pattern?: string;
 };
 
 type SwaggerNumberFormat = {
   type?: 'number';
   format?: 'float' | 'double';
+  minimum?: number;
+  maximum?: number;
+  exclusiveMinimum?: boolean;
+  exclusiveMaximum?: boolean;
+  multipleOf?: number;
 };
 
 type SwaggerIntegerFormat = {
@@ -29,6 +35,11 @@ type SwaggerIntegerFormat = {
 
 type SwaggerBooleanFormat = {
   type?: 'boolean';
+  format?: undefined;
+};
+
+type SwaggerNullFormat = {
+  type?: 'null';
   format?: undefined;
 };
 
@@ -52,6 +63,7 @@ export type SwaggerResponseContent = {
     'application/x-www-form-urlencoded': any;
     'application/json': any;
   };
+  headers?: Record<string, { description?: string; schema?: any; required?: boolean }>;
 };
 
 export type RestMethodNames = 'get' | 'post' | 'put' | 'patch' | 'delete';
@@ -103,9 +115,17 @@ export type SwaggerRouteMethod = {
 
 export type SwaggerSchema =
   | { $ref: string }
-  | ({ default?: string | number; enum?: Array<string | number> } & (
+  | ({
+      default?: string | number;
+      enum?: Array<string | number>;
+      description?: string;
+      title?: string;
+      examples?: any[];
+      example?: any;
+    } & (
       | SwaggerStringFormat
       | SwaggerBooleanFormat
+      | SwaggerNullFormat
       | SwaggerObjectFormat
       | SwaggerNumberFormat
       | SwaggerIntegerFormat
