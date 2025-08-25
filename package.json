@@ -73,5 +73,6 @@
   },
   "dependencies": {
     "@talkohavy/lodash": "^1.4.1"
-  }
+  },
+  "packageManager": "pnpm@10.15.0"
 }

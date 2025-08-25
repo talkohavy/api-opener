@@ -21,7 +21,3 @@ dist-ssr
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
-
-# I added these:
-.npmrc
