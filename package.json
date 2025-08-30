@@ -1,7 +1,6 @@
 {
   "name": "api-opener",
   "version": "2.0.0",
-  "type": "module",
   "description": "Design your API easily with Swagger Open-Api specification.",
   "private": "true",
   "keywords": ["api", "swagger", "openapi", "specification", "design", "documentation"],
@@ -26,7 +25,7 @@
     "format:fix": "biome format --verbose ./src --write",
     "format-prettier": "prettier . --check --config ./.prettierrc.mjs --ignore-path .prettierignore",
     "format-prettier:fix": "prettier . --write --config ./.prettierrc.mjs --ignore-path .prettierignore",
-    "build": "node ./build.config.js",
+    "build": "node ./build.config.mjs",
     "test": "tsx --test src/**/*.test.ts",
     "test:cov": "tsx --test --experimental-test-coverage src/**/*.test.ts",
     "test:watch": "tsx --test --watch src/**/*.test.ts"
