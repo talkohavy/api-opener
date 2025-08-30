@@ -124,7 +124,7 @@ function manipulatePackageJsonFile(outDirName) {
 }
 
 /**
- * @param {number} startTime in milliseconds
+ * @param {number} startTime - in milliseconds
  */
 function printDoneMessage(startTime) {
   const endTime = Date.now();
